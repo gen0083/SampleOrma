@@ -27,6 +27,10 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
+    def dagger_version = "2.12"
+    compile "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
     def orma_version = "4.2.5"
     compile "com.github.gfx.android.orma:orma:$orma_version"
     kapt "com.github.gfx.android.orma:orma-processor:$orma_version"

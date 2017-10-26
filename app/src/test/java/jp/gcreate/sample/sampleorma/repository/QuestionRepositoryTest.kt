@@ -61,9 +61,10 @@ class QuestionRepositoryTest {
   @Test
   fun `同じIDのデータは存在できない`() {
     orma.insertIntoQuestion(Question("a", "test", "test-a"))
-    val function = {
+    val throwsFunction = {
       orma.insertIntoQuestion(Question("a", "test", "test-2"))
-    } shouldThrow SQLiteException::class
+    }
+    throwsFunction shouldThrow SQLiteException::class
   }
 
   @Test

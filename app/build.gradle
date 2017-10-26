@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: "de.mannodermaus.android-junit5"
 
 android {
     compileSdkVersion 26
@@ -41,7 +42,9 @@ dependencies {
 
     compile "com.facebook.stetho:stetho:1.5.0"
 
-    testCompile 'junit:junit:4.12'
+    testImplementation junit5()
+    testImplementation junit5Params()
+    testCompileOnly junit5EmbeddedRuntime()
     testCompile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     testCompile 'org.amshove.kluent:kluent:1.30'
     testCompile "org.robolectric:robolectric:3.5"

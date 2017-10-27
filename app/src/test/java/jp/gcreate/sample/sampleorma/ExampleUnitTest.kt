@@ -2,10 +2,7 @@ package jp.gcreate.sample.sampleorma
 
 import assertk.assert
 import assertk.assertAll
-import assertk.assertions.isEqualTo
-import assertk.assertions.isInstanceOf
-import org.amshove.kluent.shouldEqualTo
-import org.amshove.kluent.shouldThrow
+import assertk.assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -40,30 +37,21 @@ class ExampleUnitTest {
       assert { throw NumberFormatException("error") }
           .thrownError { isInstanceOf(RuntimeException::class) }
       // NumberFormatExceptionはRuntimeExceptionを継承しているのでinstanceOfでは一致していると判断される
+      assert { throw NumberFormatException("error") }
+          .thrownError { hasClass(NumberFormatException::class) }
     }
   }
 
-  @Nested
-  @DisplayName("kluentを使ったアサーション")
-  inner class KluentTest {
-    @Test
-    @DisplayName("通常のアサーション")
-    fun test1() {
-      val a = "hoge"
-      a shouldEqualTo "hoge"
+  @Test
+  @DisplayName("assertkのアサーション")
+  fun test1() {
+    assert("hoge").contains("og")
 
-      // kluentにはassertAllみたいなマルチアサーションはない
-    }
+    assert(10).isLessThan(100)
 
-    @Test
-    @DisplayName("例外のアサーション")
-    fun test2() {
-      // この書き方では特定のメソッドを処理することができない
-      { throw IllegalArgumentException("bad") } shouldThrow IllegalArgumentException::class
+    assert(-1).isNegative()
 
-      // その場合、一旦変数で受け取る書き方をすると処理できる
-      val throwsFunction = { throw NumberFormatException("fail") }
-      throwsFunction shouldThrow RuntimeException::class
-    }
+    assert(listOf("aa", "bb", "cc"))
+        .contains("bb")
   }
 }

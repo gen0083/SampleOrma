@@ -1,12 +1,13 @@
 package jp.gcreate.sample.sampleorma.repository
 
 import android.database.sqlite.SQLiteException
+import assertk.assert
+import assertk.assertions.hasClass
+import assertk.assertions.isEqualTo
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import jp.gcreate.sample.sampleorma.model.OrmaDatabase
 import jp.gcreate.sample.sampleorma.model.Question
-import org.amshove.kluent.shouldEqualTo
-import org.amshove.kluent.shouldThrow
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -41,7 +42,7 @@ class QuestionRepositoryTest {
 
   @Test
   fun `Questionが保存できる`() {
-    orma.selectFromQuestion().count() shouldEqualTo 0
+    assert(orma.selectFromQuestion().count()).isEqualTo(0)
 
     sut.postQuestion(Question("a", "test", "testはうまくいきますか？"))
         .test()
@@ -50,21 +51,20 @@ class QuestionRepositoryTest {
         .assertValueCount(1)
         .values()[0].let {
       println(it)
-      it.id shouldEqualTo "a"
-      it.title shouldEqualTo "test"
-      it.body shouldEqualTo "testはうまくいきますか？"
+      assert(it.id).isEqualTo("a")
+      assert(it.title).isEqualTo("test")
+      assert(it.body).isEqualTo("testはうまくいきますか？")
     }
 
-    orma.selectFromQuestion().count() shouldEqualTo 1
+    assert(orma.selectFromQuestion().count()).isEqualTo(1)
   }
 
   @Test
   fun `同じIDのデータは存在できない`() {
     orma.insertIntoQuestion(Question("a", "test", "test-a"))
-    val throwsFunction = {
+    assert {
       orma.insertIntoQuestion(Question("a", "test", "test-2"))
-    }
-    throwsFunction shouldThrow SQLiteException::class
+    }.thrownError { hasClass(SQLiteException::class) }
   }
 
   @Test
@@ -78,9 +78,9 @@ class QuestionRepositoryTest {
         .assertValueCount(1)
         .values()[0].let {
       println(it)
-      it.id shouldEqualTo "a"
-      it.title shouldEqualTo "test"
-      it.body shouldEqualTo "testだよ"
+      assert(it.id).isEqualTo("a")
+      assert(it.title).isEqualTo("test")
+      assert(it.body).isEqualTo("testだよ")
     }
   }
 
@@ -108,9 +108,9 @@ class QuestionRepositoryTest {
         .assertComplete()
         .assertValueCount(3)
         .values().let {
-      it[0].id shouldEqualTo "a"
-      it[1].id shouldEqualTo "b"
-      it[2].id shouldEqualTo "c"
+      assert(it[0].id).isEqualTo("a")
+      assert(it[1].id).isEqualTo("b")
+      assert(it[2].id).isEqualTo("c")
     }
   }
 }

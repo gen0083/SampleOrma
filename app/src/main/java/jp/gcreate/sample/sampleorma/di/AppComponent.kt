@@ -1,8 +1,7 @@
 package jp.gcreate.sample.sampleorma.di
 
 import android.content.Context
-import dagger.BindsInstance
-import dagger.Component
+import dagger.*
 import jp.gcreate.sample.sampleorma.MainActivity
 import javax.inject.Singleton
 
@@ -10,7 +9,7 @@ import javax.inject.Singleton
  * Copyright 2017 G-CREATE
  */
 @Singleton
-@Component
+@Component(modules = arrayOf(AppModule::class))
 interface AppComponent {
   fun inject(activity: MainActivity)
 

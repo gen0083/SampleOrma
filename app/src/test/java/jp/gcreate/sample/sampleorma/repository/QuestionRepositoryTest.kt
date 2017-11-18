@@ -1,19 +1,12 @@
 package jp.gcreate.sample.sampleorma.repository
 
-import android.database.sqlite.SQLiteException
+import android.database.sqlite.SQLiteConstraintException
 import assertk.assert
-import assertk.assertions.hasClass
-import assertk.assertions.isEqualTo
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
-import jp.gcreate.sample.sampleorma.model.OrmaDatabase
-import jp.gcreate.sample.sampleorma.model.Question
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import assertk.assertions.*
+import jp.gcreate.sample.sampleorma.model.*
+import org.junit.*
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
+import org.robolectric.*
 import org.robolectric.annotation.Config
 
 /**
@@ -28,11 +21,10 @@ class QuestionRepositoryTest {
         .name(null)
         .build()
   }
-  private val holder: OrmaDatabaseHolder = mock { on { orma } doReturn orma }
 
   @Before
   fun setUp() {
-    sut = QuestionRepository(holder)
+    sut = QuestionRepository(orma)
   }
 
   @After
@@ -64,7 +56,7 @@ class QuestionRepositoryTest {
     orma.insertIntoQuestion(Question("a", "test", "test-a"))
     assert {
       orma.insertIntoQuestion(Question("a", "test", "test-2"))
-    }.thrownError { hasClass(SQLiteException::class) }
+    }.thrownError { hasClass(SQLiteConstraintException::class) }
   }
 
   @Test
